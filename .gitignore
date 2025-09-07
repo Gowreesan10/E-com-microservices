@@ -40,6 +40,7 @@ build/
 product-service/data/
 order_service/data/
 order_service/mysql/
+inventory-service/mysql/
 
 # === Spring Tool Suite (STS) ===
 .apt_generated
