@@ -15,11 +15,11 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     public void placeorder(OrderRequest orderRequest){
-        order orderrequest = new order();
-        orderrequest.setOrderNumber(UUID.randomUUID().toString());
-        orderrequest.setSkuCode(orderRequest.skuCode());
-        orderrequest.setPrice(orderRequest.price());
-        orderrequest.setQuantity(orderRequest.quantity());
-        orderRepository.save(orderrequest);
+        order order = new order();
+        order.setOrderNumber(UUID.randomUUID().toString());
+        order.setSkuCode(orderRequest.skuCode());
+        order.setPrice(orderRequest.price());
+        order.setQuantity(orderRequest.quantity());
+        orderRepository.save(order);
     }
 }

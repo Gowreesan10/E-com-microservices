@@ -1,7 +1,7 @@
 services:
   mysql:
     image: mysql:8.3.0
-    container_name: mysql
+    container_name: mysql_order
     environment:
       MYSQL_ROOT_PASSWORD: mysql
       MYSQL_DATABASE: order_service_db
@@ -10,3 +10,10 @@ services:
     volumes:
       - ./mysql:/var/lib/mysql
       - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: [
+      "--performance_schema=0",
+      "--innodb_buffer_pool_size=64M",
+      "--innodb_log_buffer_size=1M",
+      "--max_connections=10",
+      "--innodb_doublewrite=0"
+    ]
