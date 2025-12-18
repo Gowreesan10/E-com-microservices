@@ -3,7 +3,7 @@ spring:
     name: inventory-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/inventory_service_db # Database connection URL
+    url: jdbc:mysql://localhost:3307/inventory_service_db # Database connection URL
     username: root # Database username
     password: mysql # Database password
 
