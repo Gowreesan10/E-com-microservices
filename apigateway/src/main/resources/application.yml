@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: apigateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: product-service
+              uri: http://localhost:8080
+              predicates:
+                - Path=/ecom/product
+              filters:
+                - RewritePath=/ecom/product(?<segment>/?.*), /api/product${segment}
+
+server:
+  port: 9000
+
+
+#spring.cloud.gateway.discovery.locator.enabled=true
