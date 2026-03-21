@@ -1,6 +1,8 @@
 package com.code10.ecom.order_service.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,10 +20,15 @@ public class order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String orderNumber;
+    private Long orderNumber;
+    
+    @NotNull(message = "SKU code is required")
     private String skuCode;
+    
+    @NotNull(message = "Price is required")
     private BigDecimal price;
+    
+    @NotNull(message = "Quantity is required")
     private Integer quantity;
 
 }

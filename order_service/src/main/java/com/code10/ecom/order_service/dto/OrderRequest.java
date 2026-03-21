@@ -2,8 +2,7 @@ package com.code10.ecom.order_service.dto;
 
 import java.math.BigDecimal;
 
-public record OrderRequest( Long id,
-         String orderNumber,
+public record OrderRequest(
          String skuCode,
          BigDecimal price,
          Integer quantity) {
