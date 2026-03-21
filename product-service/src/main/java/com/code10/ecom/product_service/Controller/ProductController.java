@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -23,6 +24,12 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponse createProduct(@RequestBody ProductRequest productRequest) {
         return productService.createProduct(productRequest);
+    }
+
+    @GetMapping("/{skuCode}")
+    @ResponseStatus(HttpStatus.OK)
+    public Optional<ProductResponse> getProductBySkuCode(@PathVariable String skuCode) {
+        return productService.getProductBySkuCode(skuCode);
     }
 
     @GetMapping

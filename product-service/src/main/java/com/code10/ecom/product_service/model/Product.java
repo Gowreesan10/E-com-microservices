@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -17,10 +19,13 @@ import java.math.BigDecimal;
 @Data
 public class Product {
     @Id
-    private String id;
+    private String sku_code;
+    
+    @NotBlank(message = "Product name is required")
     private String name;
+    
     private String description;
+    
+    @NotNull(message = "Price is required")
     private BigDecimal price;
-
-    // Getters and Setters
 }
