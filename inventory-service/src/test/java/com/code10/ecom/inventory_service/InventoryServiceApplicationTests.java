@@ -64,7 +64,6 @@ class InventoryServiceApplicationTests {
 
         InventoryResponse created = restTemplate.postForObject(postUrl, request, InventoryResponse.class);
         assertThat(created).isNotNull();
-        assertThat(created.getId()).isNotNull();
         assertThat(created.getSkuCode()).isEqualTo("test-sku-123");
         assertThat(created.getQuantity()).isEqualTo(5);
 

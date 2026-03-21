@@ -18,11 +18,15 @@ public class InventoryService {
     }
 
     public InventoryResponse addInventory(InventoryRequest request) {
-        Inventory inventory = new Inventory();
-        inventory.setSkuCode(request.getSkuCode());
-        inventory.setQuantity(request.getQuantity());
-        Inventory saved = inventoryRepository.save(inventory);
-        return new InventoryResponse(saved.getId(), saved.getSkuCode(), saved.getQuantity());
+        try {
+            Inventory inventory = new Inventory();
+            inventory.setSkuCode(request.getSkuCode());
+            inventory.setQuantity(request.getQuantity());
+            Inventory saved = inventoryRepository.save(inventory);
+            return new InventoryResponse(saved.getSkuCode(), saved.getQuantity(), "Inventory added successfully");
+        } catch (Exception e) {
+            return new InventoryResponse(request.getSkuCode(), request.getQuantity(), "Failed to add inventory: " + e.getMessage());
+        }
     }
 
 }

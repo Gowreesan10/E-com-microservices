@@ -1,6 +1,8 @@
 package com.code10.ecom.inventory_service.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +17,10 @@ import lombok.Setter;
 public class Inventory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @NotBlank(message = "SKU code is required")
+    @Column(nullable = false)
     private String skuCode;
+    
+    @NotNull(message = "Quantity is required")
     private Integer quantity;
 }
