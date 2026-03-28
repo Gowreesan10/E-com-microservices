@@ -6,16 +6,68 @@ spring:
     gateway:
       server:
         webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins: "*"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders:
+                  - Content-Type
+                  - Authorization
           routes:
-            - id: product-service
+            # Product Service Routes
+            - id: product-service-get-all
               uri: http://localhost:8080
               predicates:
                 - Path=/ecom/product
               filters:
-                - RewritePath=/ecom/product(?<segment>/?.*), /api/product${segment}
+                - RewritePath=/ecom/product(?<segment>/?.*), /api/product$\{segment}
+            
+            - id: product-service-get-by-sku
+              uri: http://localhost:8080
+              predicates:
+                - Path=/ecom/product/{skuCode}
+              filters:
+                - RewritePath=/ecom/product/(?<skuCode>.*), /api/product/$\{skuCode}
+            
+            - id: product-service-create
+              uri: http://localhost:8080
+              predicates:
+                - Path=/ecom/product
+                - Method=POST
+              filters:
+                - RewritePath=/ecom/product(?<segment>/?.*), /api/product$\{segment}
+
+            # Inventory Service Routes
+            - id: inventory-service-check-stock
+              uri: http://localhost:8082
+              predicates:
+                - Path=/ecom/inventory
+                - Method=GET
+              filters:
+                - RewritePath=/ecom/inventory(?<segment>/?.*), /api/inventory$\{segment}
+            
+            - id: inventory-service-add
+              uri: http://localhost:8082
+              predicates:
+                - Path=/ecom/inventory
+                - Method=POST
+              filters:
+                - RewritePath=/ecom/inventory(?<segment>/?.*), /api/inventory$\{segment}
+
+            # Order Service Routes
+            - id: order-service-place-order
+              uri: http://localhost:8081
+              predicates:
+                - Path=/ecom/order
+                - Method=POST
+              filters:
+                - RewritePath=/ecom/order(?<segment>/?.*), /api/order$\{segment}
 
 server:
   port: 9000
-
-
-#spring.cloud.gateway.discovery.locator.enabled=true
