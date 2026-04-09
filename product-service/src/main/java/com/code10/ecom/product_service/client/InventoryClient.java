@@ -1,13 +1,12 @@
 package com.code10.ecom.product_service.client;
 
 import com.code10.ecom.product_service.dto.InventoryRequest;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.service.annotation.HttpExchange;
 
-@FeignClient(value = "inventory-service", url = "http://localhost:8082/")
+@HttpExchange(url = "http://localhost:8082/")
 public interface InventoryClient {
 
-    @PostMapping("/api/inventory")
+    @HttpExchange(value = "/api/inventory", method = "POST")
     InventoryResponse addInventory(InventoryRequest request);
     
     record InventoryResponse(String skuCode, Integer quantity, String status) {}
