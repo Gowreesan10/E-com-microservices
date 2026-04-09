@@ -29,3 +29,7 @@ logging:
         type:
           descriptor:
             sql: TRACE # Enable Hibernate SQL parameter logging
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

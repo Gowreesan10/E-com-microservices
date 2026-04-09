@@ -18,6 +18,10 @@ spring:
 server:
   port: 8081 # Server port
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
 logging:
   level:
     org:
