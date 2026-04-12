@@ -1,6 +1,7 @@
 package com.code10.ecom.apigateway;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

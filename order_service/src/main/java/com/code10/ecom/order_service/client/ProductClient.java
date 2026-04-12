@@ -7,7 +7,7 @@ import org.springframework.web.service.annotation.HttpExchange;
 
 import java.util.Optional;
 
-@HttpExchange(url = "http://localhost:8080/")
+@HttpExchange
 public interface ProductClient {
 
     @GetExchange( value = "/api/product/{skuCode}")

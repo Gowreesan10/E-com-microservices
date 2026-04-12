@@ -7,8 +7,6 @@ import com.code10.ecom.order_service.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @AllArgsConstructor
 public class OrderService {

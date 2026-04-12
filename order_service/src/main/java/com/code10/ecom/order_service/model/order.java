@@ -1,7 +1,6 @@
 package com.code10.ecom.order_service.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

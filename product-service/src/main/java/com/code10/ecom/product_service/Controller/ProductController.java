@@ -3,7 +3,6 @@ package com.code10.ecom.product_service.Controller;
 
 import com.code10.ecom.product_service.dto.ProductRequest;
 import com.code10.ecom.product_service.dto.ProductResponse;
-import com.code10.ecom.product_service.model.Product;
 import com.code10.ecom.product_service.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

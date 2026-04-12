@@ -1,50 +1,21 @@
 spring:
   application:
-    name: order_service # Application name
-
-  datasource:
-    url: jdbc:mysql://localhost:3306/order_service_db # Database connection URL
-    username: root # Database username
-    password: mysql # Database password
-
-  jpa:
-    hibernate:
-      ddl-auto: none # Hibernate DDL auto configuration
-    show-sql: true # Enable SQL logging
-    properties:
-      hibernate:
-        format_sql: true # Format SQL logs for better readability
+    name: product-service
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: product-service
+      username: root
+      password: password
+      authentication-database: admin
 
 server:
-  port: 8081 # Server port
+  port: 8080
 
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-
-logging:
-  level:
-    org:
-      springframework:
-        web: DEBUG # Enable detailed request logging
-        enableLoggingRequestDetails : DEBUG
-      hibernate:
-        SQL: DEBUG # Set logging level for Hibernate SQL
-        type:
-          descriptor:
-            sql: TRACE # Enable Hibernate SQL parameter logging
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,circuitbreakers
-  endpoint:
-    health:
-      show-details: always
-  health:
-    circuitbreakers:
-      enabled: true
 
 resilience4j:
   circuitbreaker:
@@ -68,3 +39,15 @@ resilience4j:
         slidingWindowSize: 10
         # Specifies if the sliding window is based on the number of calls (COUNT_BASED) or time (TIME_BASED)
         slidingWindowType: COUNT_BASED
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,circuitbreakers
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
