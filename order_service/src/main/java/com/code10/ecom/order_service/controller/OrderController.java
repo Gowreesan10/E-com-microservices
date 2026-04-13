@@ -4,7 +4,6 @@ import com.code10.ecom.order_service.client.InventoryClient;
 import com.code10.ecom.order_service.client.ProductClient;
 import com.code10.ecom.order_service.dto.OrderRequest;
 import com.code10.ecom.order_service.service.OrderService;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,25 +39,13 @@ public class OrderController {
         }
     }
 
-    @CircuitBreaker(name = "circuitBreaker", fallbackMethod = "fallbackIsValidProduct")
+
     public void validateProductExists(String skuCode){
         productClient.getProductBySkuCode(skuCode).orElseThrow(() -> new RuntimeException("Product with skuCode " + skuCode + " not found"));
     }
 
-    public void fallbackIsValidProduct(String skuCode, Throwable throwable) {
-        log.error("Circuit Breaker: Failed to create check product for skuCode: {}. Reason: {}",
-                skuCode, throwable.getMessage());
-    }
-
-    @CircuitBreaker(name = "circuitBreaker", fallbackMethod = "fallbackProductInStock")
     public boolean checkProductInStock(String skuCode, Integer quantity){
         return inventoryClient.isInStock(skuCode, quantity);
-    }
-
-    public boolean fallbackProductInStock(String skuCode, Integer quantity, Throwable throwable) {
-        log.error("Circuit Breaker: Failed to check inventory for skuCode: {}, quantity: {}. Reason: {}",
-                skuCode, quantity, throwable.getMessage());
-        return false; // Assume not in stock if inventory service is down
     }
 
 }

@@ -51,3 +51,5 @@ management:
   health:
     circuitbreakers:
       enabled: true
+
+inventory-url: http://localhost:8082

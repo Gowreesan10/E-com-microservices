@@ -68,3 +68,7 @@ resilience4j:
         slidingWindowSize: 10
         # Specifies if the sliding window is based on the number of calls (COUNT_BASED) or time (TIME_BASED)
         slidingWindowType: COUNT_BASED
+
+inventory-url: http://localhost:8082
+product-url: http://localhost:8080
+

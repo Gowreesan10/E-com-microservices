@@ -6,7 +6,6 @@ import com.code10.ecom.product_service.dto.InventoryRequest;
 import com.code10.ecom.product_service.dto.ProductRequest;
 import com.code10.ecom.product_service.dto.ProductResponse;
 import com.code10.ecom.product_service.model.Product;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,22 +32,15 @@ public class ProductService {
         ProductResponse response = new ProductResponse(product.getSku_code(), product.getName(), product.getDescription(), product.getPrice());
         
         // Call inventory service via circuit breaker
-        addInventoryRecord(product.getSku_code());
+        addInventoryRecordWithZeroQuantity(product.getSku_code());
         
         return response;
     }
 
-    @CircuitBreaker(name = "circuitBreaker", fallbackMethod = "fallbackAddInventory")
-    private void addInventoryRecord(String skuCode) {
+    private void addInventoryRecordWithZeroQuantity(String skuCode) {
         InventoryRequest inventoryRequest = new InventoryRequest(skuCode, 0);
         inventoryClient.addInventory(inventoryRequest);
         log.info("Added inventory record for skuCode: {} with quantity: 0", skuCode);
-    }
-
-    private void fallbackAddInventory(String skuCode, Throwable throwable) {
-        log.error("Circuit Breaker: Failed to create inventory record for skuCode: {}. Reason: {}", 
-                skuCode, throwable.getMessage());
-        // You could also add this to a retry queue or a dead letter topic here
     }
 
     public Optional<ProductResponse> getProductBySkuCode(String skuCode) {
