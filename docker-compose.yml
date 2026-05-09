@@ -1,0 +1,92 @@
+﻿# Define all the services that will be part of this Docker Compose setup
+services:
+
+  # Apache Zookeeper service - required for Kafka cluster coordination and management
+  zookeeper:
+    # Use the latest Confluent Platform Zookeeper Docker image
+    image: confluentinc/cp-zookeeper:latest
+    # Set the hostname for the container (used for inter-container communication)
+    hostname: zookeeper
+    # Give the container a predictable name for easier reference
+    container_name: zookeeper
+    # Map port 2181 from host to container (Zookeeper client port)
+    ports:
+      - "2181:2181"
+    # Environment variables to configure Zookeeper
+    environment:
+      # Set the client port that Zookeeper will listen on
+      ZOOKEEPER_CLIENT_PORT: 2181
+      # Set the tick time in milliseconds (basic time unit used by Zookeeper)
+      ZOOKEEPER_TICK_TIME: 2000
+
+  # Apache Kafka broker service - the main message broker
+  broker:
+    # Use Confluent Platform Kafka version 7.5.0 Docker image
+    image: confluentinc/cp-kafka:7.5.0
+    # Give the container a predictable name
+    container_name: broker
+    # Map Kafka ports from host to container
+    ports:
+      # Port 9092: External access from host machine to Kafka
+      - "9092:9092"
+      # Port 29092: Internal access between containers in Docker network
+      - "29092:29092"
+    # Ensure Zookeeper starts before Kafka (Kafka depends on Zookeeper)
+    depends_on:
+      - zookeeper
+    # Environment variables to configure Kafka broker
+    environment:
+        # Unique identifier for this Kafka broker in the cluster
+        KAFKA_BROKER_ID: 1
+        # Connection string to reach Zookeeper (using container name and port)
+        KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+        # Define how Kafka advertises itself to clients (both external and internal)
+        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_HOST://broker:29092
+        # Map security protocols for different listeners (both use PLAINTEXT here)
+        KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+        # Set replication factor for internal topics to 1 (single broker setup)
+        KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  # Confluent Schema Registry service - manages Avro schemas for Kafka messages
+  schema-registry:
+    # Use Confluent Platform Schema Registry version 7.5.0 Docker image
+    image: confluentinc/cp-schema-registry:7.5.0
+    # Set the hostname for inter-container communication
+    hostname: schema-registry
+    # Give the container a predictable name
+    container_name: schema-registry
+    # Map Schema Registry port (host 8085 to container 8081)
+    ports:
+      - "8085:8081"
+    # Ensure Kafka broker starts before Schema Registry
+    depends_on:
+      - broker
+    # Environment variables to configure Schema Registry
+    environment:
+      # Kafka bootstrap servers for Schema Registry to connect to
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "broker:29092"
+      # Hostname for Schema Registry service
+      SCHEMA_REGISTRY_HOST_NAME: "schema-registry"
+      # Define the listeners for Schema Registry (HTTP on port 8081)
+      SCHEMA_REGISTRY_LISTENERS: "http://schema-registry:8081"
+
+  # Kafka UI service - web-based interface for managing Kafka clusters
+  kafka-ui:
+    # Give the container a predictable name
+    container_name: kafka-ui
+    # Use the latest Kafka UI Docker image from Provectus Labs
+    image: provectuslabs/kafka-ui:latest
+    # Map Kafka UI port (host 8086 to container 8080)
+    ports:
+      - "8086:8080"
+    # Ensure Kafka broker starts before Kafka UI
+    depends_on:
+      - broker
+    # Environment variables to configure Kafka UI
+    environment:
+      # Name for the Kafka cluster in the UI
+      KAFKA_CLUSTERS_NAME: local
+      # Bootstrap servers for Kafka UI to connect to Kafka broker
+      KAFKA_CLUSTERS_BOOTSTRAPSERVERS: broker:29092
+      # Enable dynamic configuration features
+      DYNAMIC_CONFIG_ENABLED: "true"

@@ -15,6 +15,18 @@ spring:
       hibernate:
         format_sql: true # Format SQL logs for better readability
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    admin:
+      properties:
+        bootstrap.servers: localhost:9092
+    template:
+      default:
+        topic: order-placed-topic
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
 server:
   port: 8081 # Server port
 
@@ -71,4 +83,3 @@ resilience4j:
 
 inventory-url: http://localhost:8082
 product-url: http://localhost:8080
-

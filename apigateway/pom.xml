@@ -11,21 +11,8 @@
 	</parent>
 
 	<artifactId>apigateway</artifactId>
-	<name>apigateway</name>
-	<description>APIGateway</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+	<name>API Gateway</name>
+	<description>API Gateway Service</description>
 
 	<dependencies>
 		<dependency>

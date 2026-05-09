@@ -41,7 +41,8 @@ product-service/data/
 order_service/data/
 order_service/mysql/
 inventory-service/mysql/
-
+apigateway/mysql/
+frontend/
 # === Spring Tool Suite (STS) ===
 .apt_generated
 .classpath
@@ -63,3 +64,7 @@ inventory-service/mysql/
 
 # === Docs ===
 HELP.md
+
+.postman/
+postman/
+docs/

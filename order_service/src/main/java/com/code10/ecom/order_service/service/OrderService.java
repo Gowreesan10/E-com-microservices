@@ -2,16 +2,21 @@ package com.code10.ecom.order_service.service;
 
 import com.code10.ecom.order_service.dto.OrderRequest;
 import com.code10.ecom.order_service.dto.OrderResponse;
+import com.code10.ecom.order_service.event.OrderPlacedEvent;
 import com.code10.ecom.order_service.model.order;
 import com.code10.ecom.order_service.repository.OrderRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     public OrderResponse placeorder(OrderRequest orderRequest){
         try {
@@ -20,6 +25,12 @@ public class OrderService {
             order.setPrice(orderRequest.price());
             order.setQuantity(orderRequest.quantity());
             orderRepository.save(order);
+
+            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(order.getOrderNumber(), orderRequest.userDetails().email());
+
+            log.info("Start Publishing OrderPlacedEvent to Kafka - OrderID: {}, Email: {}", orderPlacedEvent.getOrderID(), orderPlacedEvent.getEmail());
+            kafkaTemplate.send("order-placed-topic", orderPlacedEvent);
+            log.info("End Publishing OrderPlacedEvent to Kafka - OrderID: {}, Email: {}", orderPlacedEvent.getOrderID(), orderPlacedEvent.getEmail());
 
             return new OrderResponse(order.getOrderNumber(), order.getSkuCode(), order.getPrice(), order.getQuantity(), "Order Placed Successfully");
         } catch (RuntimeException e) {
