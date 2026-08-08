@@ -16,7 +16,7 @@ spring:
             required: true
 
   kafka:
-    bootstrap-servers: ecom-kafka-ecom-kafka.c.aivencloud.com:18012
+    bootstrap-servers: 
     consumer:
       group-id: notificationService
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -25,10 +25,10 @@ spring:
         group.id: notificationService
         specific.avro.reader: true
 
-        schema.registry.url: https://avnadmin:AVNS_SC9krSv-4Kg-BML0N0H@ecom-kafka-ecom-kafka.c.aivencloud.com:18004
+        schema.registry.url:
         # Optionally include credentials for the schema registry
         basic.auth.credentials.source: USER_INFO
-        schema.registry.basic.auth.user.info: avnadmin:AVNS_SC9krSv-4Kg-BML0N0H
+        schema.registry.basic.auth.user.info:
 
         # ============================================================
         # AUTH MODE: Switch between Client Certificate and SASL
@@ -56,7 +56,7 @@ spring:
         sasl:
           mechanism: SCRAM-SHA-256
           jaas:
-            config: 'org.apache.kafka.common.security.scram.ScramLoginModule required username="avnadmin" password="AVNS_SC9krSv-4Kg-BML0N0H";'
+            config: 
         ssl:
           truststore:
             location: E:/github/E-com-microservices/notification-service/src/main/resources/client.truststore.jks
