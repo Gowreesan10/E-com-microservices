@@ -68,3 +68,8 @@ HELP.md
 .postman/
 postman/
 docs/
+notification-service/src/main/resources/ca.pem
+notification-service/src/main/resources/client.keystore.p12
+notification-service/src/main/resources/client.truststore.jks
+notification-service/src/main/resources/service.cert
+notification-service/src/main/resources/service.key

@@ -1,0 +1,95 @@
+spring:
+  application:
+    name: notification-service
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: gowreeshan1@gmail.com
+    password: ${GMAIL_APP_PASSWORD:}  # Set GMAIL_APP_PASSWORD as an environment variable, or paste your App Password here
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+  kafka:
+    bootstrap-servers: ecom-kafka-ecom-kafka.c.aivencloud.com:18012
+    consumer:
+      group-id: notificationService
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        group.id: notificationService
+        specific.avro.reader: true
+
+        schema.registry.url: https://avnadmin:AVNS_SC9krSv-4Kg-BML0N0H@ecom-kafka-ecom-kafka.c.aivencloud.com:18004
+        # Optionally include credentials for the schema registry
+        basic.auth.credentials.source: USER_INFO
+        schema.registry.basic.auth.user.info: avnadmin:AVNS_SC9krSv-4Kg-BML0N0H
+
+        # ============================================================
+        # AUTH MODE: Switch between Client Certificate and SASL
+        # ============================================================
+
+        # --- MODE 1: Client Certificate (mTLS) --- [INACTIVE]
+        # Uncomment below + comment MODE 2 to use Client Certificate auth
+        # NOTE: Also change bootstrap-servers port to 18001 for SSL
+        # security.protocol: SSL
+        # ssl:
+        #   truststore:
+        #     location: E:/github/E-com-microservices/notification-service/src/main/resources/client.truststore.jks
+        #     password: changeit
+        #     type: JKS
+        #   keystore:
+        #     location: E:/github/E-com-microservices/notification-service/src/main/resources/client.keystore.p12
+        #     password: changeit
+        #     type: PKCS12
+        #   key-password: changeit
+
+        # --- MODE 2: SASL (Username + Password) --- [ACTIVE]
+        # Uncomment below + comment MODE 1 to use SASL auth
+        # NOTE: Also change bootstrap-servers port to 18012 for SASL
+        security.protocol: SASL_SSL
+        sasl:
+          mechanism: SCRAM-SHA-256
+          jaas:
+            config: 'org.apache.kafka.common.security.scram.ScramLoginModule required username="avnadmin" password="AVNS_SC9krSv-4Kg-BML0N0H";'
+        ssl:
+          truststore:
+            location: E:/github/E-com-microservices/notification-service/src/main/resources/client.truststore.jks
+            password: changeit
+            type: JKS
+app:
+  notification:
+    allowed-recipient: "gowreeshan1@gmail.com"
+
+server:
+    port: 8084
+
+logging:
+  level:
+    # # Kafka client internals
+    # org.apache.kafka: DEBUG
+    # org.apache.kafka.clients: DEBUG
+    # org.apache.kafka.clients.consumer: DEBUG
+    # org.apache.kafka.clients.NetworkClient: DEBUG
+    # org.apache.kafka.common.network: DEBUG
+    # # SASL & SSL handshake
+    # org.apache.kafka.common.security: DEBUG
+    # org.apache.kafka.common.security.authenticator: DEBUG
+    # org.apache.kafka.common.security.scram: DEBUG
+    # # Spring Kafka
+    # org.springframework.kafka: DEBUG
+    # org.springframework.kafka.listener: DEBUG
+    # org.springframework.kafka.core: DEBUG
+    # # Root level (optional - shows everything)
+    # root: INFO
+    # Spring Kafka (to see when messages are consumed)
+    org.springframework.kafka.listener: INFO
+    # Email sending logs
+    org.springframework.mail: DEBUG
+    # Application specific logs
+    com.code10.ecom: DEBUG
