@@ -1,0 +1,9 @@
+{
+  "type": "record",
+  "name": "OrderPlacedEvent",
+  "namespace": "com.code10.ecom.event",
+  "fields": [
+    { "name": "orderID", "type": "long" },
+    { "name": "email", "type": "string" }
+  ]
+}

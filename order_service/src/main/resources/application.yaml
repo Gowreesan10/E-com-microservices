@@ -15,17 +15,36 @@ spring:
       hibernate:
         format_sql: true # Format SQL logs for better readability
 
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#    admin:
+#      properties:
+#        bootstrap.servers: localhost:9092
+#    template:
+#      default:
+#        topic: order-placed-topic
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   kafka:
-    bootstrap-servers: localhost:9092
-    admin:
-      properties:
-        bootstrap.servers: localhost:9092
-    template:
-      default:
-        topic: order-placed-topic
+    bootstrap-servers: ecom-kafka-ecom-kafka.c.aivencloud.com:18012
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: https://avnadmin:AVNS_SC9krSv-4Kg-BML0N0H@ecom-kafka-ecom-kafka.c.aivencloud.com:18004
+        # Optionally include credentials for the schema registry
+        basic.auth.credentials.source: USER_INFO
+        schema.registry.basic.auth.user.info: avnadmin:AVNS_SC9krSv-4Kg-BML0N0H
+
+        security.protocol: SASL_SSL
+        sasl.mechanism: SCRAM-SHA-256
+        sasl.jaas.config: 'org.apache.kafka.common.security.scram.ScramLoginModule required username="avnadmin" password="AVNS_SC9krSv-4Kg-BML0N0H";'
+        ssl.truststore.location: E:/github/E-com-microservices/notification-service/src/main/resources/client.truststore.jks
+        ssl.truststore.password: changeit
+        ssl.truststore.type: JKS
+    template:
+      default-topic: order-placed-topic
 
 server:
   port: 8081 # Server port
